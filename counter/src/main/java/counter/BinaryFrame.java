@@ -2,21 +2,21 @@ package counter;
 
 import java.awt.Font;
 
-public class TextFrame extends javax.swing.JFrame implements FrameObserver {
+public class BinaryFrame extends javax.swing.JFrame implements FrameObserver {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 8566229815454944506L;
 	javax.swing.JLabel JLabelCount = new javax.swing.JLabel();
 
-	public TextFrame() {
+	public BinaryFrame() {
 		getContentPane().setLayout(null);
 		setSize(300, 200);
 		setVisible(false);
 		getContentPane().add(JLabelCount);
 		JLabelCount.setFont(new Font("Dialog", Font.BOLD, 36));
 		JLabelCount.setBounds(48, 48, 170, 86);
-		setTitle("Text Frame");
+		setTitle("Binary Frame");
 		setCount(0);
 
 		SymWindow aSymWindow = new SymWindow();
@@ -26,7 +26,7 @@ public class TextFrame extends javax.swing.JFrame implements FrameObserver {
 	class SymWindow extends java.awt.event.WindowAdapter {
 		public void windowClosing(java.awt.event.WindowEvent event) {
 			Object object = event.getSource();
-			if (object == TextFrame.this)
+			if (object == BinaryFrame.this)
 				TextFrame_WindowClosing(event);
 		}
 	}
@@ -36,6 +36,10 @@ public class TextFrame extends javax.swing.JFrame implements FrameObserver {
 	}
 
 	public void setCount(int count) {
-		JLabelCount.setText(String.valueOf(count));
+		JLabelCount.setText(toBinary(count));
+	}
+	
+	private String toBinary(int number) {
+		return Integer.toBinaryString(number);
 	}
 }

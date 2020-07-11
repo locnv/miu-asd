@@ -1,36 +1,30 @@
 package counter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Counter {
-	
-	private int count=0;
-	private TextFrame textframe ;
-	private RectFrame rectframe ;
-	private OvalFrame ovalframe ;
-	
-	public void increment(){
+
+	private int count = 0;
+
+	private List<FrameObserver> frameObservables = new ArrayList<>();
+
+	public void increment() {
 		count++;
-    	textframe.setCount(count);
-    	rectframe.setCount(count);
-    	ovalframe.setCount(count);
+		notifyCountChange();
 	}
-	
-	public void decrement(){
+
+	public void decrement() {
 		count--;
-	   	textframe.setCount(count);
-    	rectframe.setCount(count);
-    	ovalframe.setCount(count);
+		notifyCountChange();
 	}
 
-	public void setTextframe(TextFrame textframe) {
-		this.textframe = textframe;
+	public void addFrame(FrameObserver frame) {
+		frameObservables.add(frame);
 	}
 
-	public void setRectframe(RectFrame rectframe) {
-		this.rectframe = rectframe;
-	}
-
-	public void setOvalframe(OvalFrame ovalframe) {
-		this.ovalframe = ovalframe;
+	private void notifyCountChange() {
+		frameObservables.forEach(frame -> frame.setCount(count));
 	}
 
 }

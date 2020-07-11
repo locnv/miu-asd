@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class OvalFrame extends javax.swing.JFrame {
+public class OvalFrame extends javax.swing.JFrame implements FrameObserver {
 	/**
 	 * 
 	 */
@@ -33,8 +33,8 @@ public class OvalFrame extends javax.swing.JFrame {
 		dispose(); // dispose of the Frame.
 	}
 
-	public void setCount(int cnt) {
-		count = cnt;
+	public void setCount(int count) {
+		this.count = count;
 		repaint();
 	}
 

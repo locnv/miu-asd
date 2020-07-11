@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
-public class RectFrame extends javax.swing.JFrame {
+public class RectFrame extends javax.swing.JFrame implements FrameObserver {
 	/**
 	 * 
 	 */
@@ -15,7 +15,7 @@ public class RectFrame extends javax.swing.JFrame {
 		getContentPane().setLayout(null);
 		setSize(300, 200);
 		setTitle("Rectangle Frame");
-		setCount(0);
+		setCount(10);
 
 		SymWindow aSymWindow = new SymWindow();
 		this.addWindowListener(aSymWindow);
