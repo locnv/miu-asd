@@ -1,19 +1,25 @@
 package bank.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import bank.dao.AccountDAO;
 import bank.dao.IAccountDAO;
 import bank.domain.Account;
 import bank.domain.Customer;
 
-
 public class AccountService implements IAccountService {
 	private IAccountDAO accountDAO;
+	private List<AccountObserver> accountObservers;
 
-	
-	public AccountService(){
-		accountDAO=new AccountDAO();
+	public AccountService() {
+		accountDAO = new AccountDAO();
+		accountObservers = new ArrayList<>();
+		
+		accountObservers.add(new Logger());
+		accountObservers.add(new SMSSender());
+		accountObservers.add(new EmailSender());
 	}
 
 	public Account createAccount(long accountNumber, String customerName) {
@@ -21,6 +27,8 @@ public class AccountService implements IAccountService {
 		Customer customer = new Customer(customerName);
 		account.setCustomer(customer);
 		accountDAO.saveAccount(account);
+		notifyAccountCreated(account);
+		
 		return account;
 	}
 
@@ -28,6 +36,15 @@ public class AccountService implements IAccountService {
 		Account account = accountDAO.loadAccount(accountNumber);
 		account.deposit(amount);
 		accountDAO.updateAccount(account);
+		notifyAccountChange(account);
+	}
+	
+	private void notifyAccountCreated(Account account) {
+		accountObservers.forEach(ob -> ob.accountChange(account, AccountChangeType.Created));
+	}
+	
+	private void notifyAccountChange(Account account) {
+		accountObservers.forEach(ob -> ob.accountChange(account, AccountChangeType.ValueChanged));
 	}
 
 	public Account getAccount(long accountNumber) {
@@ -44,8 +61,6 @@ public class AccountService implements IAccountService {
 		account.withdraw(amount);
 		accountDAO.updateAccount(account);
 	}
-
-
 
 	public void transferFunds(long fromAccountNumber, long toAccountNumber, double amount, String description) {
 		Account fromAccount = accountDAO.loadAccount(fromAccountNumber);
